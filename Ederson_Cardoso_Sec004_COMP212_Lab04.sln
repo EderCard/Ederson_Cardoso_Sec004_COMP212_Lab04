@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BooksLibrary", "BooksLibrar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseballLibrary", "BaseballLibrary\BaseballLibrary.csproj", "{DEF142F9-3E74-400C-80DA-50E2EF127240}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ederson_Cardoso_Exercise01", "Ederson_Cardoso_Exercise01\Ederson_Cardoso_Exercise01.csproj", "{6E4BBC0E-9C3F-4B98-8142-D220B347DEBE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{DEF142F9-3E74-400C-80DA-50E2EF127240}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEF142F9-3E74-400C-80DA-50E2EF127240}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEF142F9-3E74-400C-80DA-50E2EF127240}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E4BBC0E-9C3F-4B98-8142-D220B347DEBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E4BBC0E-9C3F-4B98-8142-D220B347DEBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E4BBC0E-9C3F-4B98-8142-D220B347DEBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E4BBC0E-9C3F-4B98-8142-D220B347DEBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
