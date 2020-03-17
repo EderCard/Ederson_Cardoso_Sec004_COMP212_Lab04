@@ -1,7 +1,9 @@
-﻿using System;
+﻿using BooksLibrary;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -16,8 +18,16 @@ namespace Ederson_Cardoso_Exercise01
         {
             InitializeComponent();
         }
+        
+        BooksEntities dbContext = new BooksEntities();
         private void TitleQueries_Load(object sender, EventArgs e)
         {
+            // Load Titles table
+            dbContext.Titles.Load();
+
+            // Specify DataSource for titleBindingSource
+            titleBindingSource.DataSource = dbContext.Titles.Local;
+
             // set the ComboBox to show the default query that
             queriesComboBox.SelectedIndex = 0;
         }
@@ -26,8 +36,6 @@ namespace Ederson_Cardoso_Exercise01
         private void queriesComboBox_SelectedIndexChanged(
            object sender, EventArgs e)
         {
-            var dbContext = new BooksLibrary.BooksEntities();
-
             // set the data displayed according to what is selected
             switch (queriesComboBox.SelectedIndex)
             {
@@ -37,19 +45,19 @@ namespace Ederson_Cardoso_Exercise01
                         from book in dbContext.Titles
                         from author in book.Authors
                         orderby book.Title1
-                        select new { book.Title1, author.LastName, author.FirstName };
+                        select new { book.Title1, author.FirstName, author.LastName };
                         
                     titleDataGridView.Columns.Clear();
                     titleDataGridView.DataSource = booksAndAuthors.ToList();
                     break;
 
                 case 1: // Get a list of all the titles and the authors who wrote them. 
-                        // Sort the results by title. Each title sort the authors
+                        // Sort the results by title. Each title sort the authors alphabetically by last name, then first name.
                     var titlesByAuthorOrdered =
                         from book in dbContext.Titles
                         from author in book.Authors
                         orderby book.Title1, author.LastName, author.FirstName
-                        select new { book.Title1, author.LastName, author.FirstName };
+                        select new { book.Title1, author.FirstName, author.LastName };
 
                     titleDataGridView.Columns.Clear();
                     titleDataGridView.DataSource = titlesByAuthorOrdered.ToList();
@@ -58,20 +66,39 @@ namespace Ederson_Cardoso_Exercise01
                 case 2: // Get a list of all the authors grouped by title, 
                         // sorted by title; 
                         // for a given title sort the author names alphabetically by last name then first name
-                    var authorsByTitle = 
+                    var authorsByTitle =
                         from book in dbContext.Titles
-                        group book by book.Title1 into x
-                        from author in dbContext.Authors
-                        let Title = x.Max(t => t.Title1)
-                        orderby Title, author.LastName, author.FirstName
-                        select new { author.LastName, author.FirstName, Title };
+                        orderby book.Title1
+                        select new
+                        {
+                            Title = book.Title1,
+                            Authors =
+                                from author in book.Authors
+                                orderby author.LastName, author.FirstName
+                                select new { author.FirstName , author.LastName }
+                        };
+
+                    // Create a table to be titleDataGridView DataSource grouped by
+                    DataTable table = new DataTable();
+                    table.Columns.Add("TITLE", typeof(string));
+                    table.Columns.Add("AUTHOR", typeof(string));
+
+                    foreach (var book in authorsByTitle)
+                    {
+                        table.Rows.Add(book.Title, "");
+                        
+                        foreach (var author in book.Authors)
+                        {
+                            table.Rows.Add("", author.FirstName + " " + author.LastName);
+                        }
+                    }
 
                     titleDataGridView.Columns.Clear();
-                    titleDataGridView.DataSource = authorsByTitle.ToList();
+                    titleDataGridView.DataSource = table; // Binding data from table
                     break;
             }
 
-            titleBindingSource.MoveFirst(); // move to first entry
+            titleBindingSource.MoveFirst(); // Move to first entry
         }
-    }
-}
+    } // end class
+} // end namespace
